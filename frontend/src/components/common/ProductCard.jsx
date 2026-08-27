@@ -1,6 +1,17 @@
 import { Card, CardContent, CardMedia, Typography, Button } from "@mui/material";
+import { useCart } from "../../context/CartContext";
 
-function ProductCard({ name, price, image }) {
+function ProductCard({id, name, price, image }) {
+    const { addToCart } = useCart();
+
+  function handleAddToCart() {
+    addToCart({
+      id,
+      name,
+      price,
+      image,
+    });
+  }
   return (
     <Card sx={{ maxWidth: 300 }}>
       <CardMedia
@@ -17,7 +28,7 @@ function ProductCard({ name, price, image }) {
           ₹{price}
         </Typography>
 
-        <Button variant="contained" fullWidth>
+        <Button variant="contained" fullWidth  onClick={handleAddToCart}>
           Add to Cart
         </Button>
       </CardContent>
