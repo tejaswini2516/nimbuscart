@@ -1,0 +1,46 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: nimbuscart-postgres-compose
+    environment:
+      POSTGRES_USER: nimbusadmin
+      POSTGRES_PASSWORD: nimbuspassword
+      POSTGRES_DB: nimbuscart
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nimbusadmin -d nimbuscart"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+    container_name: nimbuscart-backend
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: nimbuscart
+      DB_USER: nimbusadmin
+      DB_PASSWORD: nimbuspassword
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: nimbuscart-frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

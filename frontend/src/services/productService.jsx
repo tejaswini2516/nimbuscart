@@ -1,48 +1,24 @@
 import hero from "../assets/hero.png";
 
-const products = [
-  {
-    id: 1,
-    name: "Wireless Headphones",
-    price: 2499,
-    image: hero,
-  },
-  {
-    id: 2,
-    name: "Smart Watch",
-    price: 3999,
-    image: hero,
-  },
-  {
-    id: 3,
-    name: "Gaming Mouse",
-    price: 1299,
-    image: hero,
-  },
-  {
-    id: 4,
-    name: "Bluetooth Speaker",
-    price: 1999,
-    image: hero,
-  },
-  {
-    id: 5,
-    name: "Mechanical Keyboard",
-    price: 3499,
-    image: hero,
-  },
-  {
-    id: 6,
-    name: "USB-C Hub",
-    price: 1599,
-    image: hero,
-  },
-];
+const API_URL = "http://localhost:5000/api/products";
 
-export function getProducts() {
-  return products;
+export async function getProducts() {
+  const response = await fetch(API_URL);
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch products");
+  }
+
+  const products = await response.json();
+
+  return products.map((product) => ({
+    ...product,
+    price: Number(product.price),
+    image: hero,
+  }));
 }
 
-export function getFeaturedProducts() {
+export async function getFeaturedProducts() {
+  const products = await getProducts();
   return products.slice(0, 3);
 }

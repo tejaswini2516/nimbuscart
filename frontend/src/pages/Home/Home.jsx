@@ -1,10 +1,26 @@
+import { useEffect, useState } from "react";
 import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import ProductCard from "../../components/common/ProductCard";
 import { getFeaturedProducts } from "../../services/productService";
 
 function Home() {
-    const products = getFeaturedProducts();
-    
+  const [products, setProducts] = useState([]);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    async function loadFeaturedProducts() {
+      try {
+        const data = await getFeaturedProducts();
+        setProducts(data);
+      } catch (err) {
+        console.error("Error loading featured products:", err);
+        setError("Unable to load featured products");
+      }
+    }
+
+    loadFeaturedProducts();
+  }, []);
+
   return (
     <>
       <Box
@@ -33,6 +49,12 @@ function Home() {
         <Typography variant="h4" fontWeight="bold" gutterBottom>
           Featured Products
         </Typography>
+
+        {error && (
+          <Typography color="error">
+            {error}
+          </Typography>
+        )}
 
         <Grid container spacing={3}>
           {products.map((product) => (
