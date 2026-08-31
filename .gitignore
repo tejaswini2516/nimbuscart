@@ -141,3 +141,16 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+tfplan
+
+# Local Git history cleanup files
+author-mailmap.txt
+nimbuscart-before-author-rewrite.bundle
+
+# Terraform variable values
+terraform/terraform.tfvars
