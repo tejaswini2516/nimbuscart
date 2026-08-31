@@ -1,0 +1,7 @@
+resource_group_name = "your-resource-group"
+location            = "Central India"
+acr_name             = "your-acr-name"
+aks_name             = "your-aks-name"
+
+node_count   = 1
+node_vm_size = "Standard_B2s_v2"
